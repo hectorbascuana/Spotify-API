@@ -23,7 +23,7 @@ class SuscripcionController extends AbstractController
     {
         $id = $request->get('id');
         $suscripcion = $this->getDoctrine()->getRepository(Suscripcion::class)->findOneBy(['id' => $id]);
-        $data = $serializer->serialize($suscripcion, 'json', ['groups' => 'configuracion:read']);
+        $data = $serializer->serialize($suscripcion, 'json', ['groups' => 'suscripcion:read']);
         return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 }
