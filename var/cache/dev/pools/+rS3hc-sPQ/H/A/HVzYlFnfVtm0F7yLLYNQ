@@ -1,0 +1,3 @@
+<?php //Closure%2523bind
+
+return [PHP_INT_MAX, []];

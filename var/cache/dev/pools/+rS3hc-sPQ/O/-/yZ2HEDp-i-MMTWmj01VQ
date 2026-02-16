@@ -1,0 +1,3 @@
+<?php //App%255CEntity%255CConfiguracion%2523setCalidad
+
+return [PHP_INT_MAX, []];

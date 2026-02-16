@@ -1,0 +1,207 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+
+usuarios:
+  path: /usuarios
+  controller: App\Controller\UsuarioController::usuarios
+  methods: [GET, POST]
+
+usuario:
+  path: /usuario/{id}
+  controller: App\Controller\UsuarioController::usuario
+  methods: [ GET, PUT, DELETE ]
+
+
+
+
+
+usuario_plan:
+  path: /usuarios/{id}/plan
+  controller: App\Controller\PlanController::usuario_plan
+  methods: [GET]
+
+usuario_premium:
+  path: /usuarios/{id}/premium
+  controller: App\Controller\PlanController::usuario_premium
+  methods: [POST]
+
+usuario_pagos:
+  path: /usuarios/{id}/pagos
+  controller: App\Controller\PagoController::usuario_pagos
+  methods: [GET]
+
+usuario_suscipciones:
+  path: /suscripciones/{id}
+  controller: App\Controller\SuscripcionController::usuario_suscripcion
+  methods: [GET]
+
+
+
+
+configuracion_usuario:
+  path: /usuarios/{userId}/configuracion
+  controller: App\Controller\ConfiguracionController::configuracion_usuario
+  methods: [GET,PUT]
+
+
+
+
+playlists_usuario:
+  path: /usuarios/{userId}/playlists
+  controller: App\Controller\PlaylistController::playlist_usuario
+  methods: [GET,POST]
+
+playlist:
+  path: /playlists/{playlistId}
+  controller: App\Controller\PlaylistController::playlist
+  methods: [ GET ]
+
+playlist_cancion:
+  path: /playlists/{playlistId}/canciones
+  controller: App\Controller\PlaylistController::playlist_cancion
+  methods: [ GET, POST ]
+
+playlist_cancion_delete:
+  path: /playlists/{playlistId}/canciones/{cancionId}
+  controller: App\Controller\PlaylistController::playlist_delete_cancion
+  methods: [ DELETE ]
+
+
+
+
+follow_playlists:
+  path: /usuarios/{userId}/playlists-seguidas
+  controller: App\Controller\PlaylistController::playlist_seguidas
+  methods: [ GET ]
+
+follow_playlist:
+  path: /usuarios/{userId}/playlists-seguidas/{playlistId}
+  controller: App\Controller\PlaylistController::playlist_seguida
+  methods: [ PUT, DELETE ]
+
+
+follow_artistas:
+  path: /usuarios/{userId}/artistas-seguidos
+  controller: App\Controller\ArtistaController::artistas_seguidos
+  methods: [ GET ]
+
+follow_artista:
+  path: /usuarios/{userId}/artistas-seguidos/{artistaId}
+  controller: App\Controller\ArtistaController::artista_seguido
+  methods: [ PUT, DELETE ]
+
+
+follow_albums:
+  path: /usuarios/{userId}/albums-seguidos
+  controller: App\Controller\AlbumController::albums_seguidos
+  methods: [ GET ]
+
+follow_album:
+  path: /usuarios/{userId}/albums-seguidos/{albumId}
+  controller: App\Controller\AlbumController:album_seguido
+  methods: [ PUT, DELETE ]
+
+
+follow_podcasts:
+  path: /usuarios/{userId}/podcasts-seguidos
+  controller: App\Controller\PodcastController::podcasts_seguidos
+  methods: [ GET ]
+
+follow_podcast:
+  path: /usuarios/{userId}/podcasts-seguidos/{podcastId}
+  controller: App\Controller\PodcastController::podcast_seguido
+  methods: [ PUT, DELETE ]
+
+
+
+
+
+
+canciones_guardadas:
+  path: /usuarios/{userId}/canciones-guardadas
+  controller: App\Controller\CancionController::canciones_guardadas
+  methods: [GET]
+
+cancion_guardada:
+  path: /usuarios/{userId}/canciones-guardadas/{cancionId}
+  controller: App\Controller\CancionController::cancion_guardada
+  methods: [ PUT, DELETE ]
+
+
+
+
+canciones:
+  path: /canciones
+  controller: App\Controller\CancionController::canciones
+  methods: [GET]
+
+cancion:
+  path: /canciones/{cancionId}
+  controller: App\Controller\CancionController::cancion
+  methods: [GET]
+
+
+artistas:
+  path: /artistas
+  controller: App\Controller\ArtistaController::artistas
+  methods: [GET]
+
+artista:
+  path: /artistas/{artistaId}
+  controller: App\Controller\ArtistaController::artista
+  methods: [GET]
+
+artistas_canciones:
+  path: /artistas/{artistaId}/canciones
+  controller: App\Controller\ArtistaController::artista_caniones
+  methods: [GET]
+
+artista_albums:
+  path: /artistas/{artistaId}/albums
+  controller: App\Controller\ArtistaController::artista_albums
+  methods: [GET]
+
+
+albums:
+  path: /albums
+  controller: App\Controller\AlbumController::albums
+  methods: [GET]
+
+album:
+  path: /albums/{albumId}
+  controller: App\Controller\AlbumController::album
+  methods: [GET]
+
+albums_canciones:
+  path: /albums/{albumId}/canciones
+  controller: App\Controller\AlbumController::album_canciones
+  methods: [GET]
+
+
+podcasts:
+  path: /podcasts
+  controller: App\Controller\PodcastController::podcasts
+  methods: [GET]
+
+podcast:
+  path: /podcasts/{podcastId}
+  controller: App\Controller\PodcastController::podcast
+  methods: [GET]
+
+podcast_capitulos:
+  path: /podcasts/{podcastId}/capitulos
+  controller: App\Controller\PodcastController::podcast_capitulos
+  methods: [GET]
+
+capitulo:
+  path: /capitulos/{capituloId}
+  controller: App\Controller\CapituloController::Capitulo
+  methods: [GET]
+
+
+playlists:
+  path: /playlists
+  controller: App\Controller\PlaylistController::playlists
+  methods: [GET]

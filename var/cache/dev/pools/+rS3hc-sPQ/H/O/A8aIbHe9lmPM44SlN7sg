@@ -1,0 +1,3 @@
+<?php //App%255CEntity%255CConfiguracion%2523setAjuste
+
+return [PHP_INT_MAX, []];

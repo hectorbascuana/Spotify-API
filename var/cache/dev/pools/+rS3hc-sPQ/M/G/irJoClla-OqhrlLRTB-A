@@ -1,0 +1,3 @@
+<?php //Closure%2523fromCallable
+
+return [PHP_INT_MAX, []];
