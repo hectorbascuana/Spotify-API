@@ -34,13 +34,13 @@ class PodcastController extends AbstractController
                 $entityManager->flush();
 
 
-                return new Response('Deleted', Response::HTTP_OK);
+                return new Response('Deleted', 205);
             }
-            return new Response('User do not follow this podcast', Response::HTTP_CONFLICT);
+            return new Response('User do not follow this podcast', Response::HTTP_BAD_REQUEST);
 
         }elseif ($request->getMethod() == 'PUT') {
             if ($usuario->getPodcast()->contains($podcast)) {
-                return new Response('User already follow this podcast', Response::HTTP_OK);
+                return new Response('User already follow this podcast', Response::HTTP_BAD_REQUEST);
             }
             $usuario->getPodcast()->add($podcast);
             $entityManager = $this->getDoctrine()->getManager();
@@ -61,7 +61,7 @@ class PodcastController extends AbstractController
 
         $id = $request->get('userId');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $id]);
-        if (!$usuario) return new Response("podcast not found", Response::HTTP_NOT_FOUND);
+        if (!$usuario) return new Response("User not found", Response::HTTP_NOT_FOUND);
 
         $podcasts = $usuario->getPodcast();
         $data = $serializer->serialize($podcasts, 'json', ['groups' => 'podcast:read']);

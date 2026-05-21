@@ -24,9 +24,17 @@ class ConfiguracionController extends AbstractController
     {
         $id = $request->get('userId');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $id]);
+        if (!$usuario) {
+            return new Response('Usuario no encontrado', Response::HTTP_NOT_FOUND);
+        }
+
+        
         $configuracion = $this->getDoctrine()->getRepository(Configuracion::class)->findOneBy(['usuario' => $usuario]);
         if ($request->isMethod('PUT')) {
             $data = json_decode($request->getContent(), true);
+            if ($data['calidad'] > 5 || $data['tipoDescarga'] > 5 || $data['idioma'] <= 0 || $data['calidad'] <= 0 || $data['tipoDescarga'] <=0 || $data['idioma'] >=6 ){
+                return new Response("Datos invalidos", Response::HTTP_BAD_REQUEST);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $serializer->deserialize($request->getContent(), Configuracion::class, 'json',
                 [AbstractNormalizer::OBJECT_TO_POPULATE => $configuracion,

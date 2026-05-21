@@ -16,9 +16,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class AlbumController extends AbstractController
 {
 
-    /**
-     * @Route("/album")
-     */
+
     public function album_seguido(SerializerInterface $serializer, Request $request): Response
     {
         $album = $request->get('albumId');
@@ -35,9 +33,9 @@ class AlbumController extends AbstractController
                 $entityManager->flush();
 
 
-                return new Response('Deleted', Response::HTTP_OK);
+                return new Response('Deleted', 205);
             }
-            return new Response('User do not follow this playlist', Response::HTTP_FORBIDDEN);
+            return new Response('User do not follow this playlist', Response::HTTP_NOT_FOUND);
 
         }elseif ($request->getMethod() == 'PUT') {
             if ($usuario->getAlbum()->contains($album)) {

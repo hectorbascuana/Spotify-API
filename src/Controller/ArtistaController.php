@@ -34,9 +34,9 @@ class ArtistaController extends AbstractController
                 $entityManager->flush();
 
 
-                return new Response('Deleted', Response::HTTP_OK);
+                return new Response('Deleted', 205);
             }
-            return new Response('User do not follow this playlist', Response::HTTP_FORBIDDEN);
+            return new Response('User do not follow this playlist', Response::HTTP_NOT_FOUND);
 
         }elseif ($request->getMethod() == 'PUT') {
             if ($usuario->getArtista()->contains($artista)) {

@@ -19,11 +19,11 @@ class CancionController extends AbstractController
     {
         $userId = $request->get('userId');
         $user= $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $userId]);
-
+        if (!$user) return new Response("User not found", Response::HTTP_NOT_FOUND);
 
         $canciones = $user->getCancion();
-        $canciones = $serializer->serialize($canciones, 'json', ['groups' => ['cancion:read']]);
-        return new Response($canciones, Response::HTTP_OK);
+        $data = $serializer->serialize($canciones, 'json', ['groups' => ['cancion:read']]);
+        return new Response($data, Response::HTTP_OK);
     }
 
     public function cancion_guardada(SerializerInterface $serializer, Request $request): Response
@@ -33,7 +33,7 @@ class CancionController extends AbstractController
         if (!$cancion) return new Response("Cancion not found", Response::HTTP_NOT_FOUND);
         $usuarioId = $request->get('userId');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $usuarioId]);
-        if (!$usuario) return new Response("User not found", Response::HTTP_NOT_FOUND);
+        if (!$usuario) return new Response("User not found", Response::HTTP_BAD_REQUEST);
 
         if ($request->getMethod() == 'DELETE') {
             if ($usuario->getCancion()->contains($cancion)) {
@@ -42,13 +42,13 @@ class CancionController extends AbstractController
                 $entityManager->flush();
 
 
-                return new Response('Deleted', Response::HTTP_OK);
+                return new Response('Deleted', 205);
             }
-            return new Response('User do not follow this cancion', Response::HTTP_CONFLICT);
+            return new Response('User do not follow this cancion', Response::HTTP_NOT_FOUND);
 
         }elseif ($request->getMethod() == 'PUT') {
             if ($usuario->getCancion()->contains($cancion)) {
-                return new Response('User already follow this cancion', Response::HTTP_OK);
+                return new Response('User already follow this cancion', Response::HTTP_BAD_REQUEST);
             }
             $usuario->getCancion()->add($cancion);
             $entityManager = $this->getDoctrine()->getManager();

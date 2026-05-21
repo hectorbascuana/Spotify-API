@@ -25,6 +25,14 @@ class UsuarioController extends AbstractController
             // Leer usuario del body
             $data = $request->getContent();
             $usuario = $serializer->deserialize($data, Usuario::class, 'json', ['groups' => 'usuario:write']);
+
+            if ($this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['username' => $usuario->getUsername()]) !== null) {
+                return new Response('Username ya registrado', Response::HTTP_CONFLICT);
+            }
+
+            if ($this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['email' => $usuario->getEmail()]) !== null) {
+                return new Response('Email ya registrado', Response::HTTP_CONFLICT);
+            }
             $usuario->setFechaNacimiento(new \DateTime("now"));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($usuario);
@@ -83,6 +91,9 @@ class UsuarioController extends AbstractController
     {
         $id = $request->get('id');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $id]);
+        if (!$usuario) {
+            return new Response("Usuario no encontrado", Response::HTTP_NOT_FOUND);
+        }
 
         if ($request->isMethod('GET')) {
 
@@ -90,6 +101,23 @@ class UsuarioController extends AbstractController
             return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
         }elseif ($request->isMethod('PUT')) {
             $data = $request->getContent();
+
+            $putData = json_decode($data, true);
+
+            $comprueba = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['username' => $putData['username']]);
+            if ($comprueba == null || $comprueba->getId() !== $usuario->getId()) {
+                return new Response('Username ya registrado', Response::HTTP_CONFLICT);
+            }
+
+            $comprueba = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['email' => $putData['email']]);
+            if ($comprueba == null || $comprueba->getId() !== $usuario->getId()) {
+                return new Response('Email ya registrado', Response::HTTP_CONFLICT);
+            }
+            
+            if ($putData['genero'] != 'M'&& $putData['genero'] != 'F') {
+                return new Response("Género no válido", Response::HTTP_BAD_REQUEST);
+            }
+            
 
             $serializer->deserialize($data, Usuario::class, 'json', ['groups' => 'usuario:write', 'object_to_populate' => $usuario] );
 
@@ -118,7 +146,7 @@ class UsuarioController extends AbstractController
             $entityManager->remove($usuario);
             $entityManager->flush();
 
-            Return new Response("Deleted", Response::HTTP_OK, ['Content-Type' => 'application/json']);
+            Return new Response('Deleted', 205, ['Content-Type' => 'application/json']);
 
         }
 

@@ -20,6 +20,7 @@ class CapituloController extends AbstractController
     {
         $capituloId = $request->get("capituloId");
         $capitulos = $this->getDoctrine()->getRepository(Capitulo::class)->findOneBy(['id' => $capituloId]);
+        if (!$capitulos) return new Response("Capitulo not found", Response::HTTP_NOT_FOUND);
         $data = $serializer->serialize($capitulos, 'json', ['groups' => ['capitulo:read']]);
         return new Response($data, Response::HTTP_OK);
     }

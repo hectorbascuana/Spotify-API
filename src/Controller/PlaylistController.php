@@ -23,6 +23,9 @@ class PlaylistController extends AbstractController
     {
         $id = $request->get('userId');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $id]);
+        if (!$usuario) {
+            return new Response('Usuario no encontrado', Response::HTTP_NOT_FOUND);
+        }
 
         if ($request->getMethod() == 'POST') {
             $data = $request->getContent();
@@ -101,10 +104,16 @@ class PlaylistController extends AbstractController
         $playlistId = $request->get('playlistId');
         $playlist = $this->getDoctrine()->getRepository(Playlist::class)->findOneBy(['id' => $playlistId]);
 
+        if (!$playlist) {
+            return new Response(
+                'Playlist no encontrada',
+                Response::HTTP_NOT_FOUND
+            );
+        }
 
         if($request->getMethod() == 'GET') {
             $canciones = $this->getDoctrine()->getRepository(AnyadeCancionPlaylist::class)->findBy(['playlist' => $playlist]);
-            if (!$canciones) return new Response("Not found", Response::HTTP_NOT_FOUND);
+            if (!$canciones) return new Response("Sin canciones", Response::HTTP_NOT_FOUND);
 
             $data = $serializer->serialize($canciones, 'json', ['groups' => 'anyade:read']);
             return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
@@ -120,9 +129,9 @@ class PlaylistController extends AbstractController
 
             $cancion = $entityManager->getRepository(Cancion::class)->find($data['cancionId']);
 
-            if (!($cancion ||  $usuario)) {
-                if (!$usuario) return new Response("cancion no encontrada", Response::HTTP_NOT_FOUND);
-                else return new Response("Usuario no encontrado", Response::HTTP_NOT_FOUND);
+            if ($usuario === null || $cancion === null) {
+                if ($usuario === null) return new Response("Usuario no encontrado", Response::HTTP_NOT_FOUND);
+                else return new Response("Cancion no encontrada", Response::HTTP_NOT_FOUND);
             }
             $anyade = new AnyadeCancionPlaylist();
             $anyade->setCancion($cancion);
@@ -147,12 +156,17 @@ class PlaylistController extends AbstractController
         }
         $playlistId = $request->get('playlistId');
         $playlist = $this->getDoctrine()->getRepository(Playlist::class)->findOneBy(['id' => $playlistId]);
+        if (!$playlist) return new Response("Playlist no encontrada", Response::HTTP_NOT_FOUND);
 
         $cancionId = $request->get('cancionId');
         $cancion = $this->getDoctrine()->getRepository(Cancion::class)->findOneBy(['id' => $cancionId]);
+        if (!$cancion) return new Response("Cancion no encontrada", Response::HTTP_NOT_FOUND);
 
-        $anyade = $this->getDoctrine()->getRepository(AnyadeCancionPlaylist::class)->findBy(['playlist' => $playlist], ['cancion' => $cancion]);
-        if (!$anyade) return new Response("Not found", Response::HTTP_NOT_FOUND);
+        $anyade = $this->getDoctrine()->getRepository(AnyadeCancionPlaylist::class)->findOneBy([
+            'playlist' => $playlist,
+            'cancion' => $cancion
+        ]);
+        if (!$anyade) return new Response("Esta cancion no está en esta playlist", Response::HTTP_NOT_FOUND);
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($anyade);
         $entityManager->flush();
@@ -177,19 +191,19 @@ class PlaylistController extends AbstractController
                 $entityManager->flush();
 
 
-                return new Response('Deleted', Response::HTTP_OK);
+                return new Response('Deleted', 205);
             }
-            return new Response('User do not follow this playlist', Response::HTTP_FORBIDDEN);
+            return new Response('Este usuario no sigue esta lista', Response::HTTP_FORBIDDEN);
 
         }elseif ($request->getMethod() == 'PUT') {
             if ($usuario->getPlaylist()->contains($playlist)) {
-                return new Response('User already follow this playlist', Response::HTTP_OK);
+                return new Response('Este usuario ya sigue esta lista', Response::HTTP_OK);
             }
             $usuario->getPlaylist()->add($playlist);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->flush();
 
-            return new Response('Chaged', Response::HTTP_OK);
+            return new Response('Ha empezado a seguir a esta lista', Response::HTTP_OK);
         }
         return new Response('Not allowed', Response::HTTP_FORBIDDEN);
     }
@@ -202,7 +216,7 @@ class PlaylistController extends AbstractController
 
         $id = $request->get('userId');
         $usuario = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['id' => $id]);
-        if (!$usuario) return new Response("Usuario not found", Response::HTTP_NOT_FOUND);
+        if (!$usuario) return new Response("Usuario no encontrado", Response::HTTP_NOT_FOUND);
 
         $playlists = $usuario->getPlaylist();
         $data = $serializer->serialize($playlists, 'json', ['groups' => 'playlist:read']);

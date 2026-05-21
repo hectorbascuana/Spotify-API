@@ -91,8 +91,8 @@ class PlanController extends AbstractController
         }
 
         $entityManager->flush();
-        $response = $serializer->serialize($premium, 'json');
-        return new Response($response, Response::HTTP_OK);
+        $response = $serializer->serialize($premium, 'json', ['groups' => ['usuario:read', 'premium:read']]);
+        return new Response($response, 201);
     }
 
 
