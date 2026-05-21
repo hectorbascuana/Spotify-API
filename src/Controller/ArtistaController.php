@@ -102,10 +102,15 @@ class ArtistaController extends AbstractController
         if (!$artista) return new Response("Artista not found", Response::HTTP_NOT_FOUND);
         $albums = $this->getDoctrine()->getRepository(Album::class)->findBy(['artista' => $artista]);
         $canciones = [];
+        $cancionRepository = $this->getDoctrine()->getRepository(Cancion::class);
+
         foreach ($albums as $album) {
-            if (!$album) return new Response("Album not found", Response::HTTP_NOT_FOUND);
-            $canciones[] = $this->getDoctrine()->getRepository(Cancion::class)->findBy(['album' => $album]);
+            $cancionesAlbum = $cancionRepository->findBy(['album' => $album]);
+            if (!empty($cancionesAlbum)) {
+                $canciones = array_merge($canciones, $cancionesAlbum);
+            }
         }
+
         $data = $serializer->serialize($canciones, 'json', ['groups' => ['cancion:read']]);
         return new Response($data, Response::HTTP_OK);
     }

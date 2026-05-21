@@ -64,7 +64,7 @@ class Cancion
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="album_id", referencedColumnName="id")
      * })
-     * @Groups({"anyade:read"})
+     *
      */
     private $album;
 

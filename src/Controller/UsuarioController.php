@@ -25,7 +25,7 @@ class UsuarioController extends AbstractController
             // Leer usuario del body
             $data = $request->getContent();
             $usuario = $serializer->deserialize($data, Usuario::class, 'json', ['groups' => 'usuario:write']);
-
+            $usuario->setFechaNacimiento(new \DateTime("now"));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($usuario);
 
@@ -124,5 +124,17 @@ class UsuarioController extends AbstractController
 
         return new Response("Not allowed", 405);
 
+    }
+
+
+    public function login(Request $request, SerializerInterface $serializer): Response
+    {
+        $data = json_decode($request->getContent(), true);
+        $user = $this->getDoctrine()->getRepository(Usuario::class)->findOneBy(['email' => $data['email'], 'password' => $data['password']]);
+        if (!$user) {
+            return new Response("Username or password incorrect", Response::HTTP_NOT_FOUND);
+        }
+        $data = $serializer->serialize($user, 'json', ['groups' => 'usuario:read']);
+        return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);
     }
 }

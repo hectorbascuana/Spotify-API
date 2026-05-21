@@ -29,6 +29,7 @@ class PlaylistController extends AbstractController
             $playlists = $serializer->deserialize($data, Playlist::class, 'json');
             $playlists->setFechaCreacion(new \DateTime('today'));
             $playlists->setUsuario($usuario);
+            $playlists->setNumeroCanciones(0);
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($playlists);
@@ -103,6 +104,7 @@ class PlaylistController extends AbstractController
 
         if($request->getMethod() == 'GET') {
             $canciones = $this->getDoctrine()->getRepository(AnyadeCancionPlaylist::class)->findBy(['playlist' => $playlist]);
+            if (!$canciones) return new Response("Not found", Response::HTTP_NOT_FOUND);
 
             $data = $serializer->serialize($canciones, 'json', ['groups' => 'anyade:read']);
             return new Response($data, Response::HTTP_OK, ['Content-Type' => 'application/json']);

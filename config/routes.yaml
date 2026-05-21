@@ -205,3 +205,13 @@ playlists:
   path: /playlists
   controller: App\Controller\PlaylistController::playlists
   methods: [GET]
+
+login:
+  path: /login
+  controller: App\Controller\UsuarioController::login
+  methods: [POST]
+
+busca:
+  path: /buscador/{text}
+  controller: App\Controller\BuscadorController::buscador
+  methods: [GET]

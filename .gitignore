@@ -1,0 +1,40 @@
+# OS files
+.DS_Store
+Thumbs.db
+db.sqlite
+
+# IDEs and Editors
+/.idea/
+/.vscode/
+*.swp
+*~
+
+# Composer / Dependencies
+/vendor/
+
+# Symfony core files
+/var/
+!/var/cache/
+/var/cache/*
+!/var/cache/.gitkeep
+!/var/log/
+/var/log/*
+!/var/log/.gitkeep
+!/var/sessions/
+/var/sessions/*
+!/var/sessions/.gitkeep
+
+# Assets and public bundles
+/public/bundles/
+/public/build/
+
+# Environment configurations (Keep .env but ignore local / secret overrides)
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+
+# PHPUnit
+/phpunit.xml
+.phpunit.result.cache
+/tests/bootstrap.php.cache

@@ -21,7 +21,7 @@ class Usuario
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      *
-     * @Groups ({"usuario:read", "anyade:read"})
+     * @Groups ({"usuario:read", "anyade:read", "playlist:read"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Usuario
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=45, nullable=false)
-     * @Groups ({"usuario:read", "usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read", "usuario:write", "anyade:read", "playlist:read"})
  */
     private $username;
 
@@ -46,7 +46,7 @@ class Usuario
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=150, nullable=false)
-     * @Groups ({"usuario:read","usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read","usuario:write", "anyade:read", "playlist:read"})
      */
     private $email;
 
@@ -54,7 +54,7 @@ class Usuario
      * @var string|null
      *
      * @ORM\Column(name="genero", type="string", length=1, nullable=true)
-     * @Groups ({"usuario:read", "usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read", "usuario:write", "anyade:read", "playlist:read"})
      */
     private $genero;
 
@@ -62,7 +62,7 @@ class Usuario
      * @var \DateTime
      *
      * @ORM\Column(name="fecha_nacimiento", type="date", nullable=false)
-     * @Groups ({"usuario:read", "usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read", "usuario:write", "anyade:read", "playlist:read"})
      */
     private $fechaNacimiento;
 
@@ -70,7 +70,7 @@ class Usuario
      * @var string|null
      *
      * @ORM\Column(name="pais", type="string", length=45, nullable=true)
-     * @Groups ({"usuario:read", "usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read", "usuario:write", "anyade:read", "playlist:read"})
      */
     private $pais;
 
@@ -78,7 +78,7 @@ class Usuario
      * @var string|null
      *
      * @ORM\Column(name="codigo_postal", type="string", length=20, nullable=true)
-     * @Groups ({"usuario:read", "usuario:write", "anyade:read"})
+     * @Groups ({"usuario:read", "usuario:write", "anyade:read", "playlist:read"})
      */
     private $codigoPostal;
 
